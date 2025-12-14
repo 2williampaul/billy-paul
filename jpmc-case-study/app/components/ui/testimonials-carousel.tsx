@@ -4,6 +4,7 @@ import { clsx } from "clsx";
 import useEmblaCarousel, {
   type UseEmblaCarouselType,
 } from "embla-carousel-react";
+import Autoplay from "embla-carousel-autoplay";
 
 const QuoteIcon = ({ className }: { className?: string }) => (
   <svg 
@@ -337,8 +338,12 @@ interface TestimonialsCarouselProps {
 export function TestimonialsCarousel({ align = "center" }: TestimonialsCarouselProps) {
   const isLeft = align === "left";
   
+  const autoplayPlugin = React.useRef(
+    Autoplay({ delay: 10000, stopOnInteraction: true })
+  );
+  
   return (
-    <Carousel opts={{ loop: true }}>
+    <Carousel opts={{ loop: true }} plugins={[autoplayPlugin.current]}>
       {/* Desktop: side by side, Mobile: stacked */}
       <div className={clsx("flex flex-col md:flex-row gap-6", isLeft ? "" : "justify-center")}>
         {/* Content */}
