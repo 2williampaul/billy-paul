@@ -1,10 +1,9 @@
 'use client';
 
 import { useScroll, useTransform, motion, MotionValue } from 'framer-motion';
-import React, { useRef, forwardRef, useImperativeHandle } from 'react';
+import React, { useRef, forwardRef, useImperativeHandle, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { HoverSlider, HoverSliderImage, HoverSliderImageWrap, TextStaggerHover } from './animated-slideshow';
 import { BlurredStagger } from './blurred-stagger-text';
 import { WarpedGridBackground } from './warped-grid-background';
 import { LogoCarousel } from './logo-carousel';
@@ -12,6 +11,60 @@ import { LogoCarousel } from './logo-carousel';
 interface SectionProps {
   scrollYProgress: MotionValue<number>;
 }
+
+// Staggered text animation component
+interface TextStaggerHoverProps {
+  text: string;
+  isActive: boolean;
+  onHover: () => void;
+  className?: string;
+}
+
+const TextStaggerHover: React.FC<TextStaggerHoverProps> = ({ text, isActive, onHover, className }) => {
+  const characters = text.split('');
+  
+  return (
+    <span
+      className={`relative inline-block cursor-pointer ${className}`}
+      onMouseEnter={onHover}
+    >
+      {characters.map((char, index) => (
+        <span
+          key={`${char}-${index}`}
+          className="relative inline-block overflow-hidden"
+        >
+          {/* Inactive character (faded, slides up when active) */}
+          <motion.span
+            className="inline-block opacity-20"
+            initial={{ y: '0%' }}
+            animate={{ y: isActive ? '-110%' : '0%' }}
+            transition={{
+              delay: index * 0.025,
+              duration: 0.3,
+              ease: [0.25, 0.46, 0.45, 0.94],
+            }}
+          >
+            {char === ' ' ? '\u00A0' : char}
+          </motion.span>
+
+          {/* Active character (full opacity, slides in from below) */}
+          <motion.span
+            className="absolute left-0 top-0 inline-block opacity-100"
+            initial={{ y: '110%' }}
+            animate={{ y: isActive ? '0%' : '110%' }}
+            transition={{
+              delay: index * 0.025,
+              duration: 0.3,
+              ease: [0.25, 0.46, 0.45, 0.94],
+            }}
+          >
+            {char === ' ' ? '\u00A0' : char}
+          </motion.span>
+        </span>
+      ))}
+    </span>
+  );
+};
 
 const Section1: React.FC<SectionProps> = ({ scrollYProgress }) => {
   const scale = useTransform(scrollYProgress, [0, 1], [1, 0.8]);
@@ -65,85 +118,104 @@ const Section1: React.FC<SectionProps> = ({ scrollYProgress }) => {
   );
 };
 
+const SLIDES = [
+  {
+    id: "slide-1",
+    title: "J.P. Morgan Chase",
+    href: "/jpmc",
+    imageUrl: "/SNAPS/100snap.jpg",
+  },
+  {
+    id: "slide-2",
+    title: "McDonald's",
+    href: "/mcdonalds",
+    imageUrl: "/SNAPS/101snap.jpg",
+  },
+  {
+    id: "slide-3",
+    title: "HSBC",
+    href: "/hsbc",
+    videoUrl: "/work-home/hsbc-kinetic-app.mp4",
+  },
+  {
+    id: "slide-4",
+    title: "Ticketmaster",
+    href: "/ticketmaster",
+    imageUrl: "/SNAPS/104snap.jpg",
+  },
+  {
+    id: "slide-5",
+    title: "BlackRock",
+    href: "/blackrock",
+    imageUrl: "/SNAPS/105snap.jpg",
+  },
+  {
+    id: "slide-6",
+    title: "Tesco",
+    href: "/tesco",
+    imageUrl: "/SNAPS/106snap.jpg",
+  },
+];
+
 const Section2: React.FC<SectionProps> = ({ scrollYProgress }) => {
   const scale = useTransform(scrollYProgress, [0, 1], [0.8, 1]);
   const rotate = useTransform(scrollYProgress, [0, 1], [5, 0]);
-
-  const SLIDES = [
-    {
-      id: "slide-1",
-      title: "J.P. Morgan Chase",
-      href: "/jpmc",
-      imageUrl: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&auto=format&fit=crop",
-    },
-    {
-      id: "slide-2",
-      title: "McDonald's",
-      href: "/mcdonalds",
-      imageUrl: "https://images.unsplash.com/photo-1552566626-52f8b828add9?w=1200&auto=format&fit=crop",
-    },
-    {
-      id: "slide-3",
-      title: "HSBC",
-      href: "/hsbc",
-      imageUrl: "https://images.unsplash.com/photo-1554469384-e58fac16e23a?w=1200&auto=format&fit=crop",
-    },
-    {
-      id: "slide-4",
-      title: "BlackRock",
-      href: "/blackrock",
-      imageUrl: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=1200&auto=format&fit=crop",
-    },
-    {
-      id: "slide-5",
-      title: "Ticketmaster",
-      href: "/ticketmaster",
-      imageUrl: "https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?w=1200&auto=format&fit=crop",
-    },
-    {
-      id: "slide-6",
-      title: "Tesco",
-      href: "/tesco",
-      imageUrl: "https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=1200&auto=format&fit=crop",
-    },
-    {
-      id: "slide-7",
-      title: "More",
-      href: "/more",
-      imageUrl: "https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=1200&auto=format&fit=crop",
-    },
-  ];
+  const [activeSlide, setActiveSlide] = useState(0);
 
   return (
     <motion.section
       style={{ scale, rotate }}
-      className='relative h-screen bg-gradient-to-t to-[#1a1919] from-[#06060e] text-white '
+      className='relative h-screen bg-gradient-to-t to-[#1a1919] from-[#06060e] text-white'
     >
       <div className='absolute bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:54px_54px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]'></div>
       <article className='container mx-auto relative z-10 px-4 sm:px-6 h-full flex flex-col justify-center'>
-        <div className='flex flex-col md:flex-row items-center justify-center md:justify-evenly gap-6 md:gap-12 scale-100 xl:scale-[0.85] 2xl:scale-100 origin-center transition-transform duration-300'>
+        <div className='flex flex-col md:flex-row items-center justify-center md:justify-evenly gap-6 md:gap-12'>
+          {/* Text list */}
           <div className='flex flex-col space-y-1 sm:space-y-2 md:space-y-4 flex-shrink-0'>
             {SLIDES.map((slide, index) => (
               <Link key={slide.id} href={slide.href}>
                 <TextStaggerHover
-                  index={index}
-                  className="cursor-pointer text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold uppercase tracking-tighter whitespace-nowrap"
                   text={slide.title}
+                  isActive={activeSlide === index}
+                  onHover={() => setActiveSlide(index)}
+                  className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tighter whitespace-nowrap"
                 />
               </Link>
             ))}
           </div>
-          <HoverSliderImageWrap className="hidden md:block w-full max-w-2xl h-[400px] lg:h-[500px] xl:h-[600px] flex-shrink-0">
+          
+          {/* Image/Video container */}
+          <div className="hidden md:block relative w-full max-w-2xl h-[400px] lg:h-[500px] xl:h-[600px] overflow-hidden">
             {SLIDES.map((slide, index) => (
-              <HoverSliderImage
+              <div
                 key={slide.id}
-                index={index}
-                imageUrl={slide.imageUrl}
-                logoText={slide.title}
-                className="size-full"
-              />
+                className={`absolute inset-0 w-full h-full transition-all duration-700 ease-out`}
+                style={{
+                  opacity: activeSlide === index ? 1 : 0,
+                  clipPath: activeSlide === index 
+                    ? 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)' 
+                    : 'polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)'
+                }}
+              >
+                {'videoUrl' in slide && slide.videoUrl ? (
+                  <video
+                    src={slide.videoUrl}
+                    className="w-full h-full object-cover"
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                  />
+                ) : (
+                  <img
+                    src={slide.imageUrl}
+                    alt={slide.title}
+                    className="w-full h-full object-cover"
+                  />
+                )}
+              </div>
             ))}
-          </HoverSliderImageWrap>
+          </div>
         </div>
       </article>
     </motion.section>
@@ -157,21 +229,16 @@ const HeroScrollAnimation = forwardRef<HTMLElement, {}>((props, ref) => {
     offset: ['start start', 'end end'],
   });
 
-  // Forward ref to the main element
   useImperativeHandle(ref, () => container.current as HTMLElement);
 
   return (
-    <>
-      <main ref={container} className='relative h-[200vh] bg-black' id="work">
-        <Section1 scrollYProgress={scrollYProgress} />
-        <HoverSlider>
-          <Section2 scrollYProgress={scrollYProgress} />
-        </HoverSlider>
-        <footer className='group bg-[#06060e] '>
-          <div className='bg-black text-white h-40 relative z-10 grid place-content-center text-2xl rounded-tr-full rounded-tl-full'></div>
-        </footer>
-      </main>
-    </>
+    <main ref={container} className='relative h-[200vh] bg-black' id="work">
+      <Section1 scrollYProgress={scrollYProgress} />
+      <Section2 scrollYProgress={scrollYProgress} />
+      <footer className='group bg-[#06060e]'>
+        <div className='bg-black text-white h-40 relative z-10 grid place-content-center text-2xl rounded-tr-full rounded-tl-full'></div>
+      </footer>
+    </main>
   );
 });
 

@@ -32,7 +32,7 @@ export default function Overview() {
             </h2>
             <div className="space-y-6 text-base sm:text-lg text-white/90 leading-relaxed">
               <p>
-                I love crafting design systems that operate at scale, creating visual interactive experiences, and fostering collaboration. I have been delivering value for global-scale clients for over 12 years.
+                I love crafting design systems that operate at scale, creating visual interactive experiences, and fostering collaboration. I have been delivering value for global-scale clients for over 13 years across London, New York, Singapore and Dubai. I am from North London.
               </p>
               <p>
                 Fun fact: I built my own Sprinter Campervan during lockdown from my driveway/garage. The entire design-build process and camper trips I used it for were an absolute delight.
