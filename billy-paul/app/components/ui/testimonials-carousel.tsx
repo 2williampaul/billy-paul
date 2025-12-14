@@ -355,7 +355,7 @@ export function TestimonialsCarousel({ align = "center" }: TestimonialsCarouselP
                   <div className={isLeft ? "text-left" : "text-center"}>
                     <QuoteIcon className={clsx("text-white/30 mb-4 sm:mb-6 w-8 h-8 sm:w-10 sm:h-10", isLeft ? "" : "mx-auto")} />
                     <p className={clsx(
-                      "text-base sm:text-lg md:text-xl leading-relaxed font-light text-white/90",
+                      "text-base sm:text-lg leading-relaxed font-light text-[#f5f5f5]",
                       isLeft ? "max-w-3xl" : "mx-auto max-w-3xl"
                     )}>
                       &ldquo;{testimonial.quote}&rdquo;

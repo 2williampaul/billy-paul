@@ -153,7 +153,7 @@ const SLIDES = [
     id: "slide-6",
     title: "Tesco",
     href: "/tesco",
-    imageUrl: "/SNAPS/106snap.jpg",
+    videoUrl: "/work-home/tesco-vid.mp4",
   },
 ];
 
@@ -178,14 +178,14 @@ const Section2: React.FC<SectionProps> = ({ scrollYProgress }) => {
                   text={slide.title}
                   isActive={activeSlide === index}
                   onHover={() => setActiveSlide(index)}
-                  className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tighter whitespace-nowrap"
+                  className="text-[36px] font-bold tracking-tighter whitespace-nowrap"
                 />
               </Link>
             ))}
           </div>
           
           {/* Image/Video container */}
-          <div className="hidden md:block relative w-full max-w-2xl h-[400px] lg:h-[500px] xl:h-[600px] overflow-hidden">
+          <div className="hidden md:block relative w-full max-w-[540px] h-[320px] lg:h-[400px] xl:h-[480px] overflow-hidden">
             {SLIDES.map((slide, index) => (
               <div
                 key={slide.id}

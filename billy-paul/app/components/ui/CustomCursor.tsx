@@ -4,11 +4,11 @@ import { useEffect, useState, useRef } from "react";
 import { motion, useMotionValue } from "framer-motion";
 
 export default function CustomCursor() {
-  const [cursorState, setCursorState] = useState<"default" | "link" | "image">("default");
+  const [cursorState, setCursorState] = useState<"default" | "link">("default");
   const [isVisible, setIsVisible] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const exitTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const currentStateRef = useRef<"default" | "link" | "image">("default");
+  const currentStateRef = useRef<"default" | "link">("default");
 
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
@@ -46,7 +46,6 @@ export default function CustomCursor() {
       
       const target = e.target as HTMLElement;
       const isOverLink = target.tagName === "A" || target.closest("a");
-      const isOverImage = target.tagName === "IMG" || target.closest("img");
       
       if (isOverLink) {
         // Clear any pending exit timeout when entering a link
@@ -56,26 +55,17 @@ export default function CustomCursor() {
         }
         setCursorState("link");
         currentStateRef.current = "link";
-      } else if (isOverImage) {
-        // Clear any pending exit timeout when entering an image
-        if (exitTimeoutRef.current) {
-          clearTimeout(exitTimeoutRef.current);
-          exitTimeoutRef.current = null;
-        }
-        setCursorState("image");
-        currentStateRef.current = "image";
       } else {
-        // When not over link/image, delay switching to default by 1 second
-        if (currentStateRef.current === "link" || currentStateRef.current === "image") {
+        // When not over link, delay switching to default by 1 second
+        if (currentStateRef.current === "link") {
           // Only start timer if one isn't already running
           if (!exitTimeoutRef.current) {
             exitTimeoutRef.current = setTimeout(() => {
-              // Double-check we're still not over a link/image
+              // Double-check we're still not over a link
               const currentTarget = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement;
               const stillOverLink = currentTarget?.tagName === "A" || currentTarget?.closest("a");
-              const stillOverImage = currentTarget?.tagName === "IMG" || currentTarget?.closest("img");
               
-              if (!stillOverLink && !stillOverImage) {
+              if (!stillOverLink) {
                 setCursorState("default");
                 currentStateRef.current = "default";
               }
@@ -122,8 +112,8 @@ export default function CustomCursor() {
     >
       {cursorState === "default" && (
         <motion.div
-          className="w-3 h-3 rounded-full bg-white"
-          style={{ width: "12px", height: "12px" }}
+          className="rounded-full bg-white"
+          style={{ width: "4px", height: "4px" }}
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ type: "spring", stiffness: 500, damping: 30 }}
@@ -142,14 +132,6 @@ export default function CustomCursor() {
             transition={{ repeat: Infinity, duration: 2 }}
           />
         </motion.div>
-      )}
-      {cursorState === "image" && (
-        <motion.div
-          className="w-2 h-2 rounded-full bg-white"
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ type: "spring", stiffness: 500, damping: 30 }}
-        />
       )}
     </motion.div>
   );

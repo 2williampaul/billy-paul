@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { TestimonialsCarousel } from "../ui/testimonials-carousel";
 import { DottedSurface } from "../ui/dotted-surface";
+import { Button } from "../ui/neon-button";
 
 export default function Overview() {
   const [ref, inView] = useInView({
@@ -30,7 +31,7 @@ export default function Overview() {
             <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-8">
               About
             </h2>
-            <div className="space-y-6 text-base sm:text-lg text-white/90 leading-relaxed">
+            <div className="space-y-6 text-base sm:text-lg md:text-xl text-white/90 leading-relaxed">
               <p>
                 I love crafting design systems that operate at scale, creating visual interactive experiences, and fostering collaboration. I have been delivering value for global-scale clients for over 13 years across London, New York, Singapore and Dubai. I am from North London.
               </p>
@@ -40,26 +41,22 @@ export default function Overview() {
               <p>
                 I recently started to learn to play the drums and also surf, which are both super fun. I love Archery and am a certified Archery GB Level 1 Coach.
               </p>
-              <p className="pt-4">
-                <em>Contact me</em> →{" "}
+              <div className="pt-4 flex items-center gap-4 flex-wrap">
                 <a
-                  href="https://www.linkedin.com/in/billypaul"
+                  href="https://www.linkedin.com/in/williampauldesigner/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="underline hover:text-white transition-colors"
                 >
-                  Linkedin
+                  <Button className="text-white">LinkedIn</Button>
                 </a>
-                {" • "}
                 <a
                   href="https://www.designmentor.io"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="underline hover:text-white transition-colors"
                 >
-                  Design Mentor
+                  <Button className="text-white">Design Mentor</Button>
                 </a>
-              </p>
+              </div>
             </div>
           </motion.div>
           
