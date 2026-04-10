@@ -1,20 +1,23 @@
-"use client";
-
-import CustomCursor from "./components/ui/CustomCursor";
-import BackgroundMotion from "./components/ui/BackgroundMotion";
-import Navigation from "./components/ui/Navigation";
+import type { Metadata } from "next";
 import HeroScrollAnimation from "./components/ui/hero-scroll-animation";
-import Overview from "./components/sections/Overview";
+import ProfileAbout from "./components/sections/ProfileAbout";
+import ProfileExperience from "./components/sections/ProfileExperience";
 import Solution from "./components/sections/Solution";
+import ProfileClose from "./components/sections/ProfileClose";
+
+export const metadata: Metadata = {
+  title: "Billy Paul — Design Systems Designer",
+  description:
+    "Design Systems Lead Designer with 13+ years delivering for global brands. From Figma to AI infrastructure.",
+};
 
 export default function Home() {
   return (
-    <main className="relative bg-white text-black overflow-x-hidden">
-      <CustomCursor />
-      <BackgroundMotion />
-      <Navigation />
+    <main>
       <HeroScrollAnimation />
-      <Overview />
+      <ProfileAbout />
+      <ProfileExperience />
+      <ProfileClose />
       <Solution />
     </main>
   );

@@ -42,16 +42,19 @@ export default function Solution() {
       ref={ref}
       className="py-16 sm:py-24 md:py-32 lg:py-48 relative z-10 bg-white"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
+      <div className="max-w-[1184px] mx-auto px-6 md:px-12">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
         >
-          <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-black mb-16">
+          <p className="text-xs tracking-[0.25em] uppercase text-black/40 font-semibold mb-3">
+            05 — Snaps
+          </p>
+          <h2 className="text-3xl md:text-5xl font-medium tracking-tight text-black mb-6">
             Snaps
           </h2>
-          <p className="text-lg sm:text-xl text-black/70 mb-12 max-w-3xl">
+          <p className="text-base text-black/70 mb-12 max-w-3xl">
             Below are photos from my travels around Europe, Asia and the USA, which give an insight into some of the things I've seen, tasted and enjoyed.
           </p>
           {isLoading ? (
@@ -64,6 +67,15 @@ export default function Solution() {
             <BentoGrid images={images} />
           )}
         </motion.div>
+
+        <div className="flex justify-center pt-20 pb-8">
+          <button
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            className="text-sm font-semibold text-black/40 hover:text-black transition-colors duration-200 flex items-center gap-2"
+          >
+            <span>↑</span> Back to top
+          </button>
+        </div>
       </div>
     </section>
   );

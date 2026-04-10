@@ -72,14 +72,15 @@ const Section1: React.FC<SectionProps> = ({ scrollYProgress }) => {
 
   return (
     <motion.section
+      id="home"
       style={{ scale, rotate, backgroundColor: '#ffffff' }}
       className='sticky font-semibold top-0 h-screen flex flex-col items-center justify-center text-black'
     >
       <WarpedGridBackground />
 
-      <div className='flex flex-col items-center justify-center space-y-8 px-8 relative z-10'>
+      <div className='w-full flex flex-col items-center justify-center py-20 space-y-6 md:space-y-8 px-6 md:px-8 relative z-10'>
         {/* Circular photo */}
-        <div className='relative w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 lg:w-[448px] lg:h-[448px] rounded-full overflow-hidden'>
+        <div className='relative w-40 h-40 sm:w-56 sm:h-56 md:w-96 md:h-96 lg:w-[448px] lg:h-[448px] rounded-full overflow-hidden flex-shrink-0'>
           <Image
             src="/Billy-Paul-Designer.webp"
             alt="Billy Paul"
@@ -89,28 +90,29 @@ const Section1: React.FC<SectionProps> = ({ scrollYProgress }) => {
             unoptimized
           />
         </div>
-        
-        {/* Headline with blurred stagger effect */}
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <BlurredStagger 
-            text="Billy Paul is a Design System Designer|with a blend of strategy, craft and vibes" 
-            emoji={
-              <picture>
-                <source srcSet="https://fonts.gstatic.com/s/e/notoemoji/latest/26a1/512.webp" type="image/webp" />
-                <img 
-                  src="https://fonts.gstatic.com/s/e/notoemoji/latest/26a1/512.gif" 
-                  alt="⚡" 
-                  width="32" 
-                  height="32"
-                  className="inline-block align-middle"
-                />
-              </picture>
-            }
+
+        {/* Headline */}
+        <div className="w-full max-w-4xl mx-auto text-center overflow-hidden">
+          <BlurredStagger
+            text="Billy Paul is a Design System Designer|with a blend of strategy, craft and vibes — AI ones"
+            className="text-2xl sm:text-3xl md:text-3xl lg:text-4xl font-semibold tracking-tight leading-[130%] text-center break-words block w-full"
           />
+          <div className="mt-3">
+            <picture>
+              <source srcSet="https://fonts.gstatic.com/s/e/notoemoji/latest/26a1/512.webp" type="image/webp" />
+              <img
+                src="https://fonts.gstatic.com/s/e/notoemoji/latest/26a1/512.gif"
+                alt="⚡"
+                width="36"
+                height="36"
+                className="inline-block"
+              />
+            </picture>
+          </div>
         </div>
-        
-        {/* Logo carousel */}
-        <div className="w-full max-w-6xl mx-auto px-8 mt-4" style={{ backgroundColor: '#ffffff' }}>
+
+        {/* Logo carousel — desktop only */}
+        <div className="hidden md:block w-full max-w-6xl mx-auto mt-4" style={{ backgroundColor: '#ffffff' }}>
           <LogoCarousel />
         </div>
       </div>
@@ -139,8 +141,8 @@ const SLIDES = [
   },
   {
     id: "slide-4",
-    title: "Ticketmaster",
-    href: "/ticketmaster",
+    title: "Talabat",
+    href: "/talabat",
     imageUrl: "/SNAPS/104snap.jpg",
   },
   {
@@ -164,12 +166,21 @@ const Section2: React.FC<SectionProps> = ({ scrollYProgress }) => {
 
   return (
     <motion.section
+      id="work"
       style={{ scale, rotate }}
       className='relative h-screen bg-gradient-to-t to-[#1a1919] from-[#06060e] text-white'
     >
       <div className='absolute bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:54px_54px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]'></div>
-      <article className='container mx-auto relative z-10 px-4 sm:px-6 h-full flex flex-col justify-center'>
-        <div className='flex flex-col md:flex-row items-center justify-center md:justify-evenly gap-6 md:gap-12'>
+      <article className='max-w-[1184px] mx-auto relative z-10 px-6 md:px-12 h-full flex flex-col pt-[130px]'>
+        <div className="mb-8">
+          <p className="text-xs tracking-[0.25em] uppercase text-white/40 font-semibold mb-2">
+            01 — Case Studies
+          </p>
+          <h2 className="text-3xl md:text-5xl font-medium tracking-tight text-white">
+            Work
+          </h2>
+        </div>
+        <div className='flex-1 flex flex-col md:flex-row items-center justify-center md:justify-evenly gap-6 md:gap-12'>
           {/* Text list */}
           <div className='flex flex-col space-y-1 sm:space-y-2 md:space-y-4 flex-shrink-0'>
             {SLIDES.map((slide, index) => (
@@ -232,11 +243,11 @@ const HeroScrollAnimation = forwardRef<HTMLElement, {}>((props, ref) => {
   useImperativeHandle(ref, () => container.current as HTMLElement);
 
   return (
-    <main ref={container} className='relative h-[200vh] bg-black' id="work">
+    <main ref={container} className='relative h-[200vh] bg-black'>
       <Section1 scrollYProgress={scrollYProgress} />
       <Section2 scrollYProgress={scrollYProgress} />
       <footer className='group bg-[#06060e]'>
-        <div className='bg-black text-white h-40 relative z-10 grid place-content-center text-2xl rounded-tr-full rounded-tl-full'></div>
+        <div className='bg-black text-white h-40 relative z-10'></div>
       </footer>
     </main>
   );
