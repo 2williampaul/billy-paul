@@ -82,7 +82,7 @@ function StatItem({
       <div className="text-6xl md:text-7xl font-black tracking-tight text-white leading-none">
         {value}
       </div>
-      <div className="text-xs font-semibold uppercase tracking-widest text-white/35 mt-2">
+      <div className="text-xs font-semibold uppercase tracking-widest text-white/55 mt-2">
         {label}
       </div>
     </motion.div>
@@ -120,9 +120,9 @@ function AwardCard({
         {award.label}
       </span>
       <span className="text-sm font-semibold text-white">{award.project}</span>
-      <span className="text-xs text-white/40">{award.body}</span>
+      <span className="text-xs text-white/55">{award.body}</span>
       {"qualifier" in award && award.qualifier && (
-        <span className="text-xs text-white/25 italic mt-0.5">{award.qualifier}</span>
+        <span className="text-xs text-white/55 italic mt-0.5">{award.qualifier}</span>
       )}
     </motion.a>
   );
@@ -141,11 +141,11 @@ export default function ProfileAbout() {
   const columnY = useTransform(scrollYProgress, [0, 1], ["36%", "-36%"]);
 
   return (
-    <section ref={sectionRef} id="about" className="bg-black text-white py-24 md:py-32">
+    <section ref={sectionRef} id="about" className="bg-black text-white py-20 md:py-28">
       <div className="max-w-[1184px] mx-auto px-6 md:px-12">
 
         {/* Eyebrow */}
-        <p className="text-xs tracking-[0.25em] uppercase text-white/40 font-semibold mb-4">
+        <p className="text-xs tracking-[0.25em] uppercase text-white/55 font-semibold mb-4">
           02 — About Me
         </p>
 
