@@ -40,7 +40,7 @@ export default function Solution() {
     <section
       id="snaps"
       ref={ref}
-      className="py-16 sm:py-24 md:py-32 lg:py-48 relative z-10 bg-white"
+      className="py-20 md:py-28 relative z-10 bg-white"
     >
       <div className="max-w-[1184px] mx-auto px-6 md:px-12">
         <motion.div
@@ -48,7 +48,7 @@ export default function Solution() {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
         >
-          <p className="text-xs tracking-[0.25em] uppercase text-black/40 font-semibold mb-3">
+          <p className="text-xs tracking-[0.25em] uppercase text-black/60 font-semibold mb-3">
             05 — Snaps
           </p>
           <h2 className="text-3xl md:text-5xl font-medium tracking-tight text-black mb-6">
@@ -71,7 +71,7 @@ export default function Solution() {
         <div className="flex justify-center pt-20 pb-8">
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="text-sm font-semibold text-black/40 hover:text-black transition-colors duration-200 flex items-center gap-2"
+            className="text-sm font-semibold text-black/60 hover:text-black transition-colors duration-200 flex items-center gap-2"
           >
             <span>↑</span> Back to top
           </button>
