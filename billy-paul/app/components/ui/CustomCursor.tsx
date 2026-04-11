@@ -1,0 +1,139 @@
+"use client";
+
+import { useEffect, useState, useRef } from "react";
+import { motion, useMotionValue } from "framer-motion";
+
+export default function CustomCursor() {
+  const [cursorState, setCursorState] = useState<"default" | "link">("default");
+  const [isVisible, setIsVisible] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const exitTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const currentStateRef = useRef<"default" | "link">("default");
+
+  const cursorX = useMotionValue(-100);
+  const cursorY = useMotionValue(-100);
+
+  useEffect(() => {
+    // Detect if device is mobile/touch device
+    const checkMobile = () => {
+      return window.matchMedia("(pointer: coarse)").matches || 
+             window.matchMedia("(max-width: 768px)").matches;
+    };
+    
+    setIsMobile(checkMobile());
+
+    // Don't initialize custom cursor on mobile devices
+    if (checkMobile()) {
+      return;
+    }
+
+    const moveCursor = (e: MouseEvent) => {
+      cursorX.set(e.clientX);
+      cursorY.set(e.clientY);
+      setIsVisible(true);
+    };
+
+    let lastCheckTime = 0;
+    const debounceDelay = 50; // Check every 50ms to avoid too many checks
+    
+    const handleMouseMove = (e: MouseEvent) => {
+      const now = Date.now();
+      // Debounce the checks to avoid constant re-evaluation
+      if (now - lastCheckTime < debounceDelay) {
+        return;
+      }
+      lastCheckTime = now;
+      
+      const target = e.target as HTMLElement;
+      const isOverLink = target.tagName === "A" || target.closest("a");
+      
+      if (isOverLink) {
+        // Clear any pending exit timeout when entering a link
+        if (exitTimeoutRef.current) {
+          clearTimeout(exitTimeoutRef.current);
+          exitTimeoutRef.current = null;
+        }
+        setCursorState("link");
+        currentStateRef.current = "link";
+      } else {
+        // When not over link, delay switching to default by 1 second
+        if (currentStateRef.current === "link") {
+          // Only start timer if one isn't already running
+          if (!exitTimeoutRef.current) {
+            exitTimeoutRef.current = setTimeout(() => {
+              // Double-check we're still not over a link
+              const currentTarget = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement;
+              const stillOverLink = currentTarget?.tagName === "A" || currentTarget?.closest("a");
+              
+              if (!stillOverLink) {
+                setCursorState("default");
+                currentStateRef.current = "default";
+              }
+              exitTimeoutRef.current = null;
+            }, 1000);
+          }
+        } else {
+          // If already default, set immediately
+          setCursorState("default");
+          currentStateRef.current = "default";
+        }
+      }
+    };
+
+    window.addEventListener("mousemove", moveCursor);
+    window.addEventListener("mousemove", handleMouseMove);
+
+    return () => {
+      window.removeEventListener("mousemove", moveCursor);
+      window.removeEventListener("mousemove", handleMouseMove);
+      // Clear timeout on cleanup
+      if (exitTimeoutRef.current) {
+        clearTimeout(exitTimeoutRef.current);
+      }
+    };
+  }, [cursorX, cursorY]);
+
+  // Don't render custom cursor on mobile devices
+  if (isMobile) {
+    return null;
+  }
+
+  return (
+    <motion.div
+      className="fixed top-0 left-0 pointer-events-none z-50 mix-blend-difference"
+      style={{
+        x: cursorX,
+        y: cursorY,
+        translateX: "-50%",
+        translateY: "-50%",
+      }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: isVisible ? 1 : 0 }}
+    >
+      {cursorState === "default" && (
+        <motion.div
+          className="rounded-full bg-white"
+          style={{ width: "4px", height: "4px" }}
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ type: "spring", stiffness: 500, damping: 30 }}
+        />
+      )}
+      {cursorState === "link" && (
+        <motion.div
+          className="w-12 h-12 rounded-full border-2 border-white flex items-center justify-center"
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ type: "spring", stiffness: 500, damping: 30 }}
+        >
+          <motion.div
+            className="w-2 h-2 rounded-full bg-white"
+            animate={{ scale: [1, 1.2, 1] }}
+            transition={{ repeat: Infinity, duration: 2 }}
+          />
+        </motion.div>
+      )}
+    </motion.div>
+  );
+}
+
